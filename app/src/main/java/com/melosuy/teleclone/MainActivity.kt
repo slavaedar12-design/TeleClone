@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 data class TgPalette(
     val bgPrimary: Color,
@@ -133,7 +134,6 @@ fun ChatListScreen(
                 drawerContainerColor = palette.bgPrimary,
                 modifier = Modifier.width(300.dp)
             ) {
-                // Шапка профиля в стиле Telegram
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -225,7 +225,6 @@ fun ChatListScreen(
                         }
                     )
 
-                    // Папки чатов (вкладки как в Telegram)
                     ScrollableTabRow(
                         selectedTabIndex = ChatFolder.entries.indexOf(selectedFolder),
                         containerColor = palette.headerBg,
@@ -476,7 +475,6 @@ fun ChatDetailScreen(
         },
         bottomBar = {
             Column(modifier = Modifier.background(palette.bgPrimary)) {
-                // Плашка ответа (Reply)
                 replyTarget?.let { target ->
                     Row(
                         modifier = Modifier
@@ -507,7 +505,6 @@ fun ChatDetailScreen(
                     }
                 }
 
-                // Нижняя панель ввода Telegram
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -662,17 +659,17 @@ private fun MessageBubble(
                             val bars = msg.waveform.ifEmpty { List(24) { 0.5f } }
                             val barW = size.width / (bars.size * 1.5f)
                             bars.forEachIndexed { idx, amp ->
-                                val h = size.height * amp
+                                val barH = size.height * amp
                                 drawRoundRect(
                                     color = if (playingVoice && idx < 12) Color.White else palette.accent,
-                                    topLeft = Offset(idx * barW * 1.5f, (size.height - h) / 2f),
-                                    size = Size(barW, h),
+                                    topLeft = Offset(idx * barW * 1.5f, (size.height - barH) / 2f),
+                                    size = Size(barW, barH),
                                     cornerRadius = CornerRadius(2f, 2f)
                                 )
                             }
                         }
                         Text(
-                            text = String.format("0:%02d", msg.voiceDurationSec),
+                            text = String.format(Locale.getDefault(), "0:%02d", msg.voiceDurationSec),
                             color = palette.textSecondary,
                             fontSize = 11.sp
                         )
